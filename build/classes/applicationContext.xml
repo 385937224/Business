@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    	 http://www.springframework.org/schema/beans/spring-beans.xsd
+     	 http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/aop
+         http://www.springframework.org/schema/aop/spring-aop.xsd
+         http://www.springframework.org/schema/tx
+     	 http://www.springframework.org/schema/tx/spring-tx.xsd">
+     	 
+    <!-- 导入外部的properties配置文件 -->
+    <context:property-placeholder location="classpath:db.properties" />
+	<!--在tomcat服务器这样写也是没问题的，但是不同服务器，可能没有WEB-INF的文件夹。所以用classpath也行。 -->
+<!-- 	<context:property-placeholder location="/WEB-INF/classes/db.properties" /> -->
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="jdbcUrl" value="${jdbcUrl}"></property>
+		<property name="driverClass" value="${driverClass}"></property>
+		<property name="user" value="${user}"></property>
+		<property name="password" value="${password}"></property>
+		<property name="initialPoolSize" value="${initialPoolSize}"></property>
+		<property name="minPoolSize" value="3"></property>
+		<property name="maxPoolSize" value="${maxPoolSize}"></property>
+		<property name="maxIdleTime" value="1800"></property>
+	</bean>
+
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+		
+		<property name="mappingLocations">
+			<list>
+				<value>classpath:cn/pbq/entity/*.hbm.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="txManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- 用tx:advice。不再是bean。 -->
+	<tx:advice  id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="find*" read-only="true"/>
+			<tx:method name="get*" read-only="true"/>
+			<tx:method name="list*" read-only="true"/>
+			<tx:method name="*" read-only="false"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<aop:pointcut expression="execution(* cn.pbq.service.impl.*.*(..))" id="pt"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="pt"/>
+	</aop:config>
+	
+	
+	<!-- dao层的实体类，注入SessionFactory的抽象bean -->
+	<bean name="daoSession" abstract="true">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+
+
+	<!--Dao层bean-->
+	<bean id="userDao" class="cn.pbq.dao.impl.UserDaoImpl" parent="daoSession"></bean>
+	
+	
+	<!-- Service层的bean -->
+	<bean id="userService" class="cn.pbq.service.impl.UserServiceImpl">
+		<property name="userDao" ref="userDao"></property>
+	</bean>
+
+
+	<!-- Action层的bean -->
+	<bean id="userAction" class="cn.pbq.action.UserAction">
+		<property name="userService" ref="userService"></property>
+	</bean>
+
+
+<!-- 	<import resource="classpath:testBean.xml"/> -->
+</beans>
