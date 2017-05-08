@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-5-8 15:11:04 by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping>
+    <class name="cn.pbq.entity.Role" table="role" catalog="tax" optimistic-lock="version">
+        <id name="roleId" type="string">
+            <column name="roleId" length="100" />
+            <generator class="uuid" />
+        </id>
+        <property name="name" type="string">
+            <column name="name" length="20" />
+        </property>
+        <property name="state" type="string">
+            <column name="state" length="1" />
+        </property>
+		<!--inverse="true"  要加上，操作role  同时级联保存、删除、 更新 role-privilege 会报错 -->
+        <set name="rolePrivileges" table="role_privilege" inverse="true" lazy="false" cascade="save-update,delete" >
+            <key>
+                <column name="roleId" length="100" not-null="true" />
+            </key>
+            <one-to-many class="cn.pbq.entity.RolePrivilege" />
+        </set>
+
+    </class>
+</hibernate-mapping>

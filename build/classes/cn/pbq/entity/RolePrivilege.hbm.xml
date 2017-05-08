@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-5-8 15:11:04 by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping>
+    <class name="cn.pbq.entity.RolePrivilege" table="role_privilege" catalog="tax" optimistic-lock="version">
+        <composite-id name="id" class="cn.pbq.entity.RolePrivilegeId">
+			<key-many-to-one name="role" lazy="false" class="cn.pbq.entity.Role"  > 
+				<column name="roleId"></column>
+			</key-many-to-one>
+            <key-property name="code" type="string">
+                <column name="code" length="20" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

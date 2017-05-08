@@ -36,7 +36,7 @@
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
-				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.show_sql">false</prop>
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
 			</props>
 		</property>
@@ -68,28 +68,28 @@
 	</aop:config>
 	
 	
-	<!-- dao层的实体类，注入SessionFactory的抽象bean -->
+	<!-- dao层的实体类，注入SessionFactory的抽象bean。 -->
 	<bean name="daoSession" abstract="true">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
-
-
-
 	<!--Dao层bean-->
 	<bean id="userDao" class="cn.pbq.dao.impl.UserDaoImpl" parent="daoSession"></bean>
-	
 	
 	<!-- Service层的bean -->
 	<bean id="userService" class="cn.pbq.service.impl.UserServiceImpl">
 		<property name="userDao" ref="userDao"></property>
 	</bean>
 
-
 	<!-- Action层的bean -->
 	<bean id="userAction" class="cn.pbq.action.UserAction">
 		<property name="userService" ref="userService"></property>
 	</bean>
 
-
+	<!-- 注解扫描的方式，完成   创建对象、对象注入 -->
+	<context:component-scan base-package="cn.pbq.service.impl"></context:component-scan>
+	<context:component-scan base-package="cn.pbq.dao.impl"></context:component-scan>
+	<context:component-scan base-package="cn.pbq.action"></context:component-scan>
+	<context:component-scan base-package="cn.pbq.filter"></context:component-scan>
+		
 <!-- 	<import resource="classpath:testBean.xml"/> -->
 </beans>

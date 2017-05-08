@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+	
+<struts>
+	<package name="login-action" extends="base-default" namespace="/sys">
+		<action name="login_*" class="cn.pbq.action.LoginAction" method="{1}">
+			<result name="{1}">/WEB-INF/jsp/{1}.jsp</result>
+			<result name="loginUI">/WEB-INF/jsp/loginUI.jsp</result>
+			<result name="homeAction" type="redirectAction">
+				<param name="actionName">home_home</param>
+<!-- 				因为登录用户的信息保存到session域对象中了。不用在这里传递了。可直接从session对象去取。 -->
+<!-- 				<param name="aa">${user.nickName}</param> -->
+<!-- 				<param name="encode">true</param> -->
+			</result>
+<!-- 			<result name="listAction" type="redirectAction"> -->
+<!-- 				<param name="actionName"></param> -->
+<!-- 				<param name="userName"></param> -->
+<!-- 				<param name="encode">true</param> -->
+<!-- 			</result> -->
+		</action>
+	</package>
+</struts>	
