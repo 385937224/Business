@@ -2,6 +2,7 @@ package cn.pbq.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 
 public class User implements Serializable{
@@ -14,7 +15,8 @@ public class User implements Serializable{
 	
 	private String headImg;
 	private String gender;
-//	private List<UerRole> uerRoles;
+	//对应的 是中间表User_Role、不是直接写Roles表的类
+	private List<User_Role> user_Roles;
 	private String state;
 	private String mobile;
 	private String email;
@@ -99,6 +101,14 @@ public class User implements Serializable{
 	public void setMemo(String memo) {
 		this.memo = memo;
 	}
+	public List<User_Role> getUser_Roles() {
+		return user_Roles;
+	}
+	public void setUser_Roles(List<User_Role> user_Roles) {
+		this.user_Roles = user_Roles;
+	}
+
+	
 	
 	
 	

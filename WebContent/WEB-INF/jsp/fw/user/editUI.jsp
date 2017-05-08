@@ -4,7 +4,7 @@
 <%@include file="/common/header.jsp"%>
 <script type="text/javascript"
 	src="${basePath}js/datepicker/WdatePicker.js"></script>
-<title>用户管理</title>
+<title>用户管理1321</title>
 
 <script type="text/javascript">
 	//实现部门回显。（临时方法，复杂在拼凑语句哪里。）
@@ -29,7 +29,7 @@
 	//最后面 有用原生js--ajax写的用户校验功能。同步、异步请求的案例。亲测OK。效果等效于这个。
 	function doVerifyUserName() {
 		$("#verifyUserName").html("");
-		var regex = /^[1-9a-zA-Z]+$/;
+		var regex = /^[0-9a-zA-Z]+$/;
 		var $userName = $("input[name='user.userName']");
 		if (regex.test($userName.val())) {
 			$.ajax(
@@ -99,9 +99,9 @@
 
 		//调用效验功能
 		var passwordFlag = doVarifyPassword();
-		alert(passwordFlag);
+// 		alert(passwordFlag);
 		doVerifyUserName();
-		alert(userNameFlag);
+// 		alert(userNameFlag);
 
 		if (userNameFlag && passwordFlag) {
 			document.forms[0].submit();
@@ -173,7 +173,9 @@
 						</tr>
 						<tr>
 							<td class="tdBg" width="200px">角色：</td>
-							<td></td>
+							<td><s:checkboxlist list="#roleList" name="roledIdRow"  listKey="roleId" listValue="name"></s:checkboxlist>
+							</td>
+							<%-- <s:checkboxlist list="#user_RolList" ></s:checkboxlist> --%>
 						</tr>
 						<tr>
 							<td class="tdBg" width="200px">电子邮箱：</td>

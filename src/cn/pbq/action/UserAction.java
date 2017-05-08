@@ -6,12 +6,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
+import javax.annotation.Resource;
 import javax.servlet.Servlet;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -30,8 +32,10 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
 import antlr.StringUtils;
+import cn.pbq.entity.Role;
 import cn.pbq.entity.User;
-
+import cn.pbq.entity.User_Role;
+import cn.pbq.service.RoleService;
 import cn.pbq.service.UserService;
 import jdk.nashorn.internal.ir.RuntimeNode.Request;
 
@@ -51,6 +55,9 @@ public class UserAction extends ActionSupport implements RequestAware{
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
+	@Resource
+	private RoleService roleService;
+
 
 	/***********************封装提交的参数***************************/
 	private User user;
@@ -58,6 +65,7 @@ public class UserAction extends ActionSupport implements RequestAware{
 	private String headImgFileName;
 	private String headImgContentType;
 	private String[] selectedRow;
+	private String[] roledIdRow;
 	private File userExcel;
 	private String userExcelFileName;
 	private String userExcelContentType;
@@ -73,7 +81,8 @@ public class UserAction extends ActionSupport implements RequestAware{
 	
 	//新增页面
 	public String addUI(){
-		
+		List<Role> roleList = roleService.getAll();
+		ActionContext.getContext().getContextMap().put("roleList", roleList);
 		return "addUI";
 	}
 	
@@ -86,10 +95,8 @@ public class UserAction extends ActionSupport implements RequestAware{
 		InputStream in = UserAction.class.getResourceAsStream("/uploadPath.properties");
 		properties.load(in);
 		String path = properties.getProperty("user_uploadPath");
-		
 			
-		if(headImg!=null){
-			
+		if(headImg!=null){			
 //			String path= ServletActionContext.getServletContext().getRealPath("/upload");
 			String uuid = UUID.randomUUID().toString().replace("-", "");
 			headImgFileName = uuid +headImgFileName.substring(headImgFileName.lastIndexOf("."));
@@ -100,17 +107,63 @@ public class UserAction extends ActionSupport implements RequestAware{
 //			保存到数据库实际是个路径名。服务器虚拟路径使用。可以再拼上些文件层次 ,如："user/"+headImgFileName2
 			user.setHeadImg(headImgFileName);
 		}
-		userService.save(user);
+
+	
+//		if(roledIdRow!=null){
+//			for (int i = 0; i < roledIdRow.length; i++) {
+//				System.out.println(roledIdRow[i]);
+//			}
+//		}
+		
+//		userService.save(user);
+		userService.saveUserAndRole(user, roledIdRow);
 		return "listAction";
 	}
 	
 	
 	//跳转到编辑页面
 	public String editUI(){
+
 		user = userService.findById(user.getId());
+		List<User_Role> user_RolList = userService.findUser_RolByUserId(user.getId());
+		/**
+		 * 循环显示怎么封装的。
+		 */
+//		for (User_Role user_Role : user_RolList) {
+//			System.out.println(user_Role.getUserId());		
+//			System.out.println(user_Role.getUserRoleID());
+//			System.out.println("111111111111111111111");
+//			//我们只查了user_role表，有role.roleId。所以hibernate会帮我们封装。这里可以取到。但取不到role对象。
+//			System.out.println(user_Role.getRole().getRoleId());
+//			//此处错误。因为我们只查了user_role表。这表中的字段没有role的。所以这个role对象没被初始化。
+//			System.out.println(user_Role.getRole());
+//		}
 		
+		
+
+		if(user_RolList!=null && user_RolList.size()>0){			
+			/**
+			 * 没初始化数组。下面 roledIdRow[i]=roleId  是无法赋值成功。
+			 * 结果导致一直设置成功，roledIdRow数组  报异常：NullPointerException.
+			 * 而且强制你设置这个数组的初始化大小。
+			 */
+			roledIdRow= new String[user_RolList.size()];
+			int i=0;
+			//取出roleId放到全局成员变量数组，方便<s:checkboxlist>进行回显。
+			for (User_Role user_Role : user_RolList) {
+					String roleId = user_Role.getRole().getRoleId();
+					roledIdRow[i]=roleId;
+					i++;
+			}	
+		}
+		
+		
+	
+		//找出所以角色
+		List<Role> roleList = roleService.getAll();		
+		ActionContext.getContext().getContextMap().put("roleList", roleList);
 		request.put("user", user);
-		return "editUI";
+		return "editUI" ; 
 	}
 	
 	//保存编辑
@@ -137,22 +190,26 @@ public class UserAction extends ActionSupport implements RequestAware{
 //			保存到数据库实际是个路径名。服务器虚拟路径使用。可以再拼上些文件层次 ,如："user/"+headImgFileName2
 			user.setHeadImg(headImgFileName);
 		}
-		
-		userService.update(user);
+		userService.updateUserAndRole(user, roledIdRow);
+//		userService.update(user);
 		return "listAction";
 	}
 	
 	//删除
 	public String delete(){
-		userService.delete(user.getId());
+//		userService.delete(user.getId());	
+		//连同该用户具有的  角色都删了。
+		userService.deleteUserAndRole(user.getId());
 		return "listAction";
 	}
 	
 	//批量删除	
 	public String deleteAll(){
+		
 		if(selectedRow!= null){
 			for (String id : selectedRow) {
-				userService.delete(id);
+//				userService.delete(id);
+				userService.deleteUserAndRole(id);
 			}
 		}	
 		return "listAction";
@@ -191,14 +248,13 @@ public class UserAction extends ActionSupport implements RequestAware{
 	
 	//ajax校验用户 的唯一性
 	public void verifyUserName(){
-		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		List<User> userList = userService.getAll();
 		String userNameFlag= "yes";
 //		字符串比较是否相等用equals().用== 是比较类型的或数字的大小。
 //		if(userList.get(i).getUserName()==user.getUserName())-------结果一直为false。
 		
 		for (int i = 0; i < userList.size(); i++) {
-			System.out.println(user.getId());
+//			System.out.println(user.getId());
 			if(user.getId()==null){
 				if(userList.get(i).getUserName().equals(user.getUserName())){
 					userNameFlag= "no";
@@ -283,5 +339,11 @@ public class UserAction extends ActionSupport implements RequestAware{
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
+	public String[] getRoledIdRow() {
+		return roledIdRow;
+	}
+	public void setRoledIdRow(String[] roledIdRow) {
+		this.roledIdRow = roledIdRow;
+	}
+
 }

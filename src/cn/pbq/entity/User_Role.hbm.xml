@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="cn.pbq.entity">
+
+	<class name="User_Role" table="user_role">
+		<id name="userRoleID" >
+			<generator class="uuid"></generator>
+		</id>
+		<property name="userId" type="java.lang.String" length="100"></property>
+		<many-to-one name="role"  lazy="false" column="roleId" class="cn.pbq.entity.Role"></many-to-one>	
+	</class>
+
+</hibernate-mapping>
+
+
+

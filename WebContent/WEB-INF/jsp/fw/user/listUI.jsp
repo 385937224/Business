@@ -10,8 +10,10 @@
     	
     	//全选、反选
     	function doSelectAll(){
-    		$("input[name='selectedRow']").prop("checked",$("#selAll").is(":checked"));
-    
+			// jquery 1.6 前
+			//$("input[name=selectedRow]").attr("checked", $("#selAll").is(":checked"));
+			//prop jquery 1.6+建议使用
+			$("input[name=selectedRow]").prop("checked", $("#selAll").is(":checked"));		
     	}
     	 
     

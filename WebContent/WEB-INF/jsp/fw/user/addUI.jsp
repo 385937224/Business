@@ -25,7 +25,7 @@
     function doVerifyUserName(){
     	$("#verifyUserName").html("");
 
-    	var regex = /^[1-9a-zA-Z]+$/;
+    	var regex = /^[0-9a-zA-Z]+$/;
     	var $userName = $("input[name='user.userName']");
     	//局部刷新不要用插入新标签的做法。推荐定位插入内容
 //     	var $span = $("<span style='color: red'>只能是数字或字母</span>");
@@ -223,7 +223,7 @@
         </tr>
         <tr>
             <td class="tdBg" width="200px">角色：</td>
-            <td></td>
+            <td><c:forEach items="${roleList}" var="roleTemp"><input type="checkbox" name="roledIdRow" value="${roleTemp.roleId}" >${roleTemp.name}</c:forEach></td>
         </tr>
         <tr>
             <td class="tdBg" width="200px">电子邮箱：</td>

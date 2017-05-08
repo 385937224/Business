@@ -2,7 +2,6 @@
 <!DOCTYPE struts PUBLIC
 	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
 	"http://struts.apache.org/dtds/struts-2.3.dtd">
-
 <struts>
 
 	<!-- 禁用动态方法访问 -->
@@ -21,7 +20,22 @@
 	<constant name="struts.multipart.maxSize" value="31457280"></constant>
 
 
-	<package name="user-action" extends="struts-default" namespace="/fw">
+	<!--全局配置 -->
+ 	<package name="base-default" extends="struts-default" >
+		<!--全局result视图配置 -->
+ 		<global-results>
+ 			<result name="sysException" >/WEB-INF/jsp/error.jsp</result>
+ 			<result name="input">/WEB-INF/jsp/error.jsp</result>
+ 		</global-results>
+		<!-- 全局异常类映射配置，即异常处理 		 -->
+ 		<global-exception-mappings>
+ 			<exception-mapping result="sysException" exception="cn.pbq.exception.SysException"></exception-mapping>
+ 		</global-exception-mappings>
+ 	</package>
+ 	
+ 	
+	<!-- useraction的配置，继承全局配置的 包 -->
+	<package name="user-action" extends="base-default" namespace="/fw">
 		<action name="user_*" class="cn.pbq.action.UserAction" method="{1}">
 			<result name="{1}">/WEB-INF/jsp/fw/user/{1}.jsp</result>
 			<result name="listAction" type="redirectAction">
@@ -32,7 +46,14 @@
 		</action>
 	</package>
 
-	
+
+	 <!--  RoleAction角色  的Struts 配置 -->
+	 <include file="cn/pbq/action/roleAction_struts.xml"></include>
+	 <!--  HomeAction  的Struts 配置 -->
+	 <include file="cn/pbq/action/homeAction_struts.xml"></include>	
+	 
+	 <include file="cn/pbq/action/*_struts.xml"></include> 
+	 
 <!-- 	<include file="testStruts.xml"></include> -->
 
 </struts>

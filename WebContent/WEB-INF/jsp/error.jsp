@@ -1,11 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=gb2312"
+<%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="gb2312"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <HTML>
 	<HEAD>
-		<title>${reqeust.info }</title>
-		<link rel="stylesheet" href="image/style.css">
+		<title>系统异常信息</title>
+
 	</HEAD>
+	${reqeust.info }
 	<body leftMargin="0" topMargin="0"  bgcolor="#f3f3f3">
 		<form id="Form1" method="post">
 			<table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -21,10 +22,9 @@
 								<td align="center">
 									<table width="500" border="0">
 										<tr align="center" height="100">
-											<td>一：${request.info }
-												二：${exception.errorMsg}
-												三：<s:property value="exception.errorMsg"/>
-												四：
+											<td>一请求信息：${request.info }
+												二异常信息：${exception.errorMsg}
+												三封装的信息：<s:property value="exception.errorMsg"/>
 											</td>
 											<%
 // 												String url = (String)request.getAttribute("url");
