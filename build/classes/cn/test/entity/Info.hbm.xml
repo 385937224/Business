@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-5-14 19:18:52 by Hibernate Tools 3.6.0.Final -->
+<hibernate-mapping>
+    <class name="cn.test.entity.Info" table="info" catalog="tax">
+        <id name="infoId" type="string">
+            <column name="infoId" length="100" />
+            <generator class="assigned" />
+        </id>
+        <property name="infoType" type="string">
+            <column name="infoType" length="10" />
+        </property>
+        <property name="title" type="string">
+            <column name="title" length="30" />
+        </property>
+        <property name="source" type="string">
+            <column name="source" length="100" />
+        </property>
+        <property name="content" type="string">
+            <column name="content" length="65535" />
+        </property>
+        <property name="memo" type="string">
+            <column name="memo" length="300" />
+        </property>
+        <property name="creator" type="string">
+            <column name="creator" length="10" />
+        </property>
+        <property name="createTime" type="timestamp">
+            <column name="createTime" length="19" not-null="true" />
+        </property>
+        <property name="state" type="string">
+            <column name="state" length="1" />
+        </property>
+    </class>
+</hibernate-mapping>

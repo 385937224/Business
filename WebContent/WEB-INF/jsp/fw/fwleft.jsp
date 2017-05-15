@@ -84,7 +84,7 @@
                 </dl>
 
                 <dl>
-                    <dt><a class="xxfb" href="#" target="mainFrame1"><b></b>信息发布管理<s
+                    <dt><a class="xxfb" href="${ctx}fw/info_listUI.action" target="mainFrame1"><b></b>信息发布管理<s
                             class="down"></s> </a></dt>
                 </dl>
                 <dl class="">

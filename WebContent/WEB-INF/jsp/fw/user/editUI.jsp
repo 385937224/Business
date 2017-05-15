@@ -214,6 +214,9 @@
 				</div>
 			</div>
 		</div>
+		
+<!-- 		保存listUI页面的查询条件值。使之能传递到edit()方法中。最终是为了保存之后，能实现查询条件回显 -->
+		<s:hidden name="searchValue"></s:hidden>	
 	</form>
 </body>
 </html>

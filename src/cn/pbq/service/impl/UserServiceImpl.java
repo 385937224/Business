@@ -137,7 +137,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 				 * 这样直接new Role对象，就省去了根据roleId查询得到Role对象的的操作啦！！！！！！
 				 */
 				User_Role user_Role = new User_Role(user.getId(), new Role(roleId));	
-				System.out.println(user_Role);
+	
 				userDao.saveUser_Role(user_Role);
 			}	
 		}

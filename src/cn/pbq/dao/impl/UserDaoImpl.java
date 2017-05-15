@@ -12,6 +12,22 @@ import cn.pbq.entity.User_Role;
 
 public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 
+
+	
+	/**
+	 * 复写查询所以记录方法，把它改写成分页查询的结果。
+	 */
+//	@Override
+//	public List<User> getAll() {
+//		String hql = "FROM User";
+//		Query query = getSession().createQuery(hql);
+//		query.setMaxResults(3);
+//		query.setFirstResult(1);
+//		return query.list();
+//		
+//	}
+
+
 	@Override
 	public void saveUser_Role(User_Role user_Role) {
 		getSession().save(user_Role);
@@ -57,7 +73,6 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		
 		Query query = getSession().createQuery(hql);
 		query.setParameter(0, userId);
-		System.out.println(query.list());
 		return query.list();
 	}
 

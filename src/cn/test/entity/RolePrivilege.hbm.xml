@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-5-14 19:18:52 by Hibernate Tools 3.6.0.Final -->
+<hibernate-mapping>
+    <class name="cn.test.entity.RolePrivilege" table="role_privilege" catalog="tax">
+        <composite-id name="id" class="cn.test.entity.RolePrivilegeId">
+            <key-property name="roleId" type="string">
+                <column name="roleId" length="100" />
+            </key-property>
+            <key-property name="code" type="string">
+                <column name="code" length="20" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="role" class="cn.test.entity.Role" update="false" insert="false" fetch="select">
+            <column name="roleId" length="100" not-null="true" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

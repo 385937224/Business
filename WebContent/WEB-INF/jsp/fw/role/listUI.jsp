@@ -32,7 +32,13 @@
 		document.forms[0].action = "${basePath}fw/role_deleteAll.action";
 		document.forms[0].submit();
 	}
+	
+	function doSearch() {
+		document.forms[0].action = "${basePath}fw/role_listUI.action";
+		document.forms[0].submit();
+	}
 
+	var goPageUri="${basePath}fw/role_listUI.action?pageNumber=";
 </script>
 </head>
 <body class="rightBody">
@@ -47,7 +53,7 @@
 					</div>
 					<div class="search_art">
 						<li>角色名称：<s:textfield name="role.name" cssClass="s_text"
-								id="roleName" cssStyle="width:160px;" />
+								id="roleName" cssStyle="width:160px;" onchange="doSearch()" />
 						</li>
 						<li><input type="button" class="s_button" value="搜 索"
 							onclick="doSearch()" /></li>
@@ -106,11 +112,8 @@
 					<table width="100%" class="pageDown" border="0" cellspacing="0"
 						cellpadding="0">
 						<tr>
-							<td align="right">总共1条记录，当前第 1 页，共 1 页 &nbsp;&nbsp; <a
-								href="#">上一页</a>&nbsp;&nbsp;<a href="#">下一页</a> 到&nbsp;<input
-								type="text" style="width: 30px;"
-								onkeypress="if(event.keyCode == 13){doGoPage(this.value);}"
-								min="1" max="" value="1" /> &nbsp;&nbsp;
+							<td align="right">
+								<jsp:include page="/common/page.jsp"></jsp:include>
 							</td>
 						</tr>
 					</table>

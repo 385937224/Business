@@ -39,7 +39,7 @@
                     <td align="center"></td>
                     <td align="left"></td>
                     <td align="right">
-                        <a><b></b><font color="red">欢迎您，${user.nickName }&nbsp;</font></a>
+                        <a><b></b><font color="red">欢迎您，${sessionScope.user.nickName }&nbsp;</font></a>
                     </td>
                     <td align="center"><img src="${ctx}/images/home/help.png" width="12" height="17"  /></td>
                     <td align="left"><a href="javascript:void(0);">帮助</a></td>
@@ -82,10 +82,10 @@
                     <td width="5%"><img src="${ctx}/images/home/gs10.png" width="4" height="59" alt="" /></td>
                     <td width="60%"><table width="95%" border="0" cellpadding="0" cellspacing="0">
                         <tr>
-                            <td colspan="2" style=" font-weight:bold; color:#3a7daa;">${user.nickName}</td>
+                            <td colspan="2" style=" font-weight:bold; color:#3a7daa;">${sessionScope.user.nickName}</td>
                         </tr>
                         <tr>
-                            <td colspan="2">所属部门：${user.dept}</td>
+                            <td colspan="2">所属部门：${sessionScope.user.dept}</td>
                         </tr>
                     </table>
                     </td>
@@ -124,7 +124,7 @@
             <div class="lc_grzxbt">
                 <h1>我的投诉</h1>
                 <div style="float:right;padding-top:3px;">
-                	<s:a action="home_complainAddUI" namespace="/sys">我要投诉</s:a>&nbsp;&nbsp;
+                	<s:a action="home_complainAddUI" namespace="/sys" >我要投诉</s:a>            
                 </div>
             </div>
             <table width="98%" border="0" align="center">
@@ -156,7 +156,7 @@
     </div>
 </div>
 <!-- 尾部{ -->
-<div class="foot">版权所有©国税局 2014</div>
+<div class="foot">XXXXXXX</div>
 <!-- }尾部 -->
 </body>
 </html>

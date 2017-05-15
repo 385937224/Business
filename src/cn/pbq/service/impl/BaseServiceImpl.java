@@ -11,6 +11,8 @@ import org.aspectj.weaver.patterns.ThisOrTargetAnnotationPointcut;
 
 import cn.pbq.dao.BaseDao;
 import cn.pbq.service.BaseService;
+import cn.pbq.util.Page;
+import cn.pbq.util.SqlUtil;
 
 public class BaseServiceImpl<T> implements BaseService<T> {
 
@@ -55,6 +57,19 @@ public class BaseServiceImpl<T> implements BaseService<T> {
 		return baseDao.getAll();
 	}
 
+	
+	//条件查询得到列表。
+	@Override
+	public List<T> findObjectByCondition(String sql, List<String> paremeterList) {
+		return  baseDao.findObjectByCondition(sql, paremeterList);
+	}
+
+	//条件查询，并加入了分页
+	@Override
+	public Page getPage(SqlUtil sqlUtil,int pageNumber,int pageSize) {
+		return baseDao.getPage(sqlUtil, pageNumber, pageSize);
+
+	}
 	
 	
 }

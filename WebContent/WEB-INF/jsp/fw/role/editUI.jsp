@@ -52,7 +52,8 @@
 				</div>
 			</div>
 		</div>
-
+		<!-- 保存查询条件 -->
+		<s:hidden name="searchValue"></s:hidden>
 	</form>
 </body>
 </html>

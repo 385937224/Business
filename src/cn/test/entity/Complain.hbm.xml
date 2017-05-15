@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-5-14 19:18:52 by Hibernate Tools 3.6.0.Final -->
+<hibernate-mapping>
+    <class name="cn.test.entity.Complain" table="complain" catalog="tax">
+        <id name="compId" type="string">
+            <column name="compId" length="32" />
+            <generator class="assigned" />
+        </id>
+        <property name="title" type="string">
+            <column name="title" length="100" />
+        </property>
+        <property name="deptOfPeople" type="string">
+            <column name="deptOfPeople" length="10" />
+        </property>
+        <property name="people" type="string">
+            <column name="people" length="10" />
+        </property>
+        <property name="compTime" type="date">
+            <column name="compTime" length="10" />
+        </property>
+        <property name="state" type="string">
+            <column name="state" length="1" />
+        </property>
+        <property name="compContent" type="string">
+            <column name="compContent" length="65535" />
+        </property>
+        <property name="complainant" type="string">
+            <column name="complainant" length="10" />
+        </property>
+        <property name="compCompany" type="string">
+            <column name="compCompany" length="50" />
+        </property>
+        <property name="compMobile" type="string">
+            <column name="compMobile" length="13" />
+        </property>
+        <property name="anonymity" type="java.lang.Boolean">
+            <column name="anonymity" />
+        </property>
+        <set name="replytocomps" table="replytocomp" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="compId" length="32" />
+            </key>
+            <one-to-many class="cn.test.entity.Replytocomp" />
+        </set>
+    </class>
+</hibernate-mapping>

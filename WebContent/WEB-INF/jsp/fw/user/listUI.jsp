@@ -4,6 +4,8 @@
 <head>
     <title>用户管理</title>
     <!-- 日期组件WdatePicker -->
+    
+    
     <script type="text/javascript" src="${basePath}js/datepicker/WdatePicker.js"></script>
     <%@include file="/common/header.jsp" %>
     <script type="text/javascript">
@@ -31,6 +33,11 @@
 			document.forms[0].submit();
 		}  
     	
+    	function doDelete(id) {
+			document.forms[0].action="${basePatn}fw/user_delete.action?user.id="+ id;
+			document.forms[0].submit();
+		}
+    	
     	//批量删除----------前面<a href="">的标签,要传参数。这里不用,因为这里是表单元素，<input>,提交是自动会把参数附带进去的。
     	function doDeleteAll() {
 			$("form").eq(0).attr("action","${basePath}fw/user_deleteAll.action");
@@ -52,7 +59,17 @@
     	}
     	
     	
+    	function doSearch() {
+    		//其实不用专门在action中设置doSearch方法。  listUI()中可以根据判断加上 where 条件。不佳where就listAll。加上where就是查一部分。
+// 			document.forms[0].action="${basePatn}fw/user_doSearch.action";
+			document.forms[0].action="${basePatn}fw/user_listUI.action";
+			document.forms[0].submit();
+		}
+    	
+    	
+    	var goPageUri="${basePatn}fw/user_listUI.action?pageNumber=";
     </script>
+    
 </head>
 
 <body class="rightBody">
@@ -64,7 +81,7 @@
                 <div class="search_art">    
                 	<ol>
 	                    <li>
-	                       	 用户名：<s:textfield name="user.nickName" cssClass="s_text" id="userName"  cssStyle="width:160px;"/>
+	                       	 用户名：<s:textfield name="user.nickName" cssClass="s_text" id="nickName"  cssStyle="width:160px;" onchange="doSearch()"/>
 	                    </li>
 	                    <li><input type="button" class="s_button" value="搜 索" onclick="doSearch()"/></li>
 	                    <li style="float:right;">
@@ -98,7 +115,7 @@
                                 <td align="center">${user.email }</td>
                                 <td align="center">
                                     <a href="javascript:doEdit('${user.id }')">编辑</a>
-                                    <a href="${basePath}fw/user_delete.action?user.id=${user.id}">删除</a>
+                                    <a href="javascript:doDelete('${user.id }')">删除</a>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -110,10 +127,10 @@
 			cellpadding="0">
 			<tr>
 				<td align="right">
-                 	总共1条记录，当前第 1 页，共 1 页 &nbsp;&nbsp;
-                            <a href="#">上一页</a>&nbsp;&nbsp;<a href="#">下一页</a>
-					到&nbsp;<input type="text" style="width: 30px;" onkeypress="if(event.keyCode == 13){doGoPage(this.value);}" min="1"
-					max="" value="1" /> &nbsp;&nbsp;
+					<%@include file="/common/page.jsp" %>
+<!-- 				两种方法引入都行. -->
+					<jsp:include page="/common/page.jsp"></jsp:include>
+
 			    </td>
 			</tr>
 		</table>	

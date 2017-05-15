@@ -7,8 +7,7 @@
 <struts>
 	<package name="home-action" extends="base-default" namespace="/sys">
 		<action name="home_*" class="cn.pbq.action.HomeAction" method="{1}">
-			<result name="{1}">/WEB-INF/jsp/fw/{1}.jsp</result>
-			<result name="home">/WEB-INF/jsp/home/{1}.jsp</result>		
+			<result name="{1}">/WEB-INF/jsp/home/{1}.jsp</result>
 		</action>
 	</package>
 

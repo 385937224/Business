@@ -58,7 +58,7 @@ public class LoginAction extends ActionSupport {
 			}
 
 		}
-		return loginUI();
+		return loginUI();   //根据xml配置。这里是转发。此时的重复刷新不会影响数据库。所以转发是没关系的。
 	}
 	
 
@@ -70,7 +70,7 @@ public class LoginAction extends ActionSupport {
 		ActionContext.getContext().getSession().remove(Constant.USER);
 //		Object object1 = ActionContext.getContext().getSession().get(Constant.USER);
 //		System.out.println(object1);//打印是null。销毁了。
-		return loginUI();
+		return loginUI();   //根据xml配置。这里是转发。此时的重复刷新不会影响数据库。所以转发是没关系的。
 	}
 	
 	

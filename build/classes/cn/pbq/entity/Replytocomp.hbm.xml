@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-5-14 19:18:52 by Hibernate Tools 3.6.0.Final -->
+<hibernate-mapping>
+    <class name="cn.pbq.entity.Replytocomp" table="replytocomp" catalog="tax">
+        <id name="replyId" type="string">
+            <column name="replyId" length="32" />
+            <generator class="uuid" />
+        </id>
+        <many-to-one name="complain" class="cn.pbq.entity.Complain" fetch="select">
+            <column name="compId" length="32" />
+        </many-to-one>
+        <property name="replyTime" type="date">
+            <column name="replyTime" length="10" />
+        </property>
+        <property name="replyDept" type="string">
+            <column name="replyDept" length="10" />
+        </property>
+        <property name="replyPeople" type="string">
+            <column name="replyPeople" length="10" />
+        </property>
+        <property name="replyContent" type="string">
+            <column name="replyContent" length="65535" />
+        </property>
+    </class>
+</hibernate-mapping>

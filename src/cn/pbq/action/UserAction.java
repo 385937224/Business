@@ -19,6 +19,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.jasper.tagplugins.jstl.core.Out;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -31,14 +32,15 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
-import antlr.StringUtils;
 import cn.pbq.entity.Role;
 import cn.pbq.entity.User;
 import cn.pbq.entity.User_Role;
 import cn.pbq.service.RoleService;
 import cn.pbq.service.UserService;
+import cn.pbq.util.Page;
+import cn.pbq.util.SqlUtil;
 import jdk.nashorn.internal.ir.RuntimeNode.Request;
-
+ 
 
 
 
@@ -51,6 +53,7 @@ public class UserAction extends ActionSupport implements RequestAware{
 		this.request=request;		
 	}
 
+	
 	private UserService userService;
 	public void setUserService(UserService userService) {
 		this.userService = userService;
@@ -69,15 +72,44 @@ public class UserAction extends ActionSupport implements RequestAware{
 	private File userExcel;
 	private String userExcelFileName;
 	private String userExcelContentType;
-
+	//专门用来保存查询条件值的。只能保存一个。复杂的就要定义个数组或对象去保存。
+	private String searchValue;
+	//如果向实现像查询条件一样回显在listUI，又要设置一个变量来存储 这个页码记录。
+	//页码.int基本数据类型。没赋值。默认为0.
+	private int pageNumber;
+	//总页数
+	private int pageTotal;
+	//总记录
+	private long sum;
 	
-	// 列表页面
+	/**
+	 * 2.优化列表页面（第2次改造）： 条件查询 并进行分页。
+	 */
 	public String listUI() {
-	//	Map<String, Object> request = ActionContext.getContext().getContextMap();
-		List<User> userList = userService.getAll();	
-		request.put("userList", userList);
-		return "listUI";
-	}
+			
+			SqlUtil sqlUtil = new SqlUtil();
+			//是包括了包名的。cn.pbq.entity.User。也OK。
+			//HQl区分大小写。我我们直接写”User“字符串要注意大小写。"user"不行。"User"可以查到。
+			sqlUtil.setFrom(User.class.getName());
+			if(user!=null){
+				if(StringUtils.isNotBlank(user.getNickName())){
+					
+					sqlUtil.setWhere("nickName like ?","%"+user.getNickName()+"%");
+				}
+			}
+
+//			sqlUtil.setOrderBy("nickName", "asc");  //user.nickName会出错。因为  小写的user。	
+			if(pageNumber<1)pageNumber=1;
+			Page page = userService.getPage(sqlUtil, pageNumber, 3);
+			pageTotal=page.getPageTotal();
+			sum=page.getSum();
+			
+			
+			request.put("userList", page.getList());
+			return "listUI";
+		}
+	
+	
 	
 	//新增页面
 	public String addUI(){
@@ -117,13 +149,17 @@ public class UserAction extends ActionSupport implements RequestAware{
 		
 //		userService.save(user);
 		userService.saveUserAndRole(user, roledIdRow);
+//		return "listUI";
 		return "listAction";
 	}
 	
 	
 	//跳转到编辑页面
 	public String editUI(){
-
+		
+//		从ListUI进到editUI时候，把查询条件框里的值先保存起来。防止覆盖。
+		searchValue= user.getNickName();
+		
 		user = userService.findById(user.getId());
 		List<User_Role> user_RolList = userService.findUser_RolByUserId(user.getId());
 		/**
@@ -162,13 +198,16 @@ public class UserAction extends ActionSupport implements RequestAware{
 		//找出所以角色
 		List<Role> roleList = roleService.getAll();		
 		ActionContext.getContext().getContextMap().put("roleList", roleList);
-		request.put("user", user);
+//		这里不必要再放到域对象中。因为赋给Action类中的成员变量user。那么struts会自动把成员变量放到域对象中。jsp页面用EL表达式（只能取域对象的值）能取。
+//		request.put("user", user);
 		return "editUI" ; 
 	}
 	
 	//保存编辑
 	//保存编辑的时候也要处理上传的头像文件的新上传文件就没了。
 	public String edit()throws Exception{
+//		System.out.println("@@@@@@@@@@@@@@"+searchValue);
+		
 		String id = user.getId();
 		User userInDB = userService.findById(id);
 		user.setHeadImg(userInDB.getHeadImg());
@@ -197,7 +236,10 @@ public class UserAction extends ActionSupport implements RequestAware{
 	
 	//删除
 	public String delete(){
-//		userService.delete(user.getId());	
+//		userService.delete(user.getId());
+
+		searchValue=user.getNickName();
+		
 		//连同该用户具有的  角色都删了。
 		userService.deleteUserAndRole(user.getId());
 		return "listAction";
@@ -205,7 +247,7 @@ public class UserAction extends ActionSupport implements RequestAware{
 	
 	//批量删除	
 	public String deleteAll(){
-		
+		searchValue=user.getNickName();
 		if(selectedRow!= null){
 			for (String id : selectedRow) {
 //				userService.delete(id);
@@ -220,7 +262,7 @@ public class UserAction extends ActionSupport implements RequestAware{
 	public void exportExcel(){
 		try {
 			List<User> userList = userService.getAll();
-			System.out.println("!!!!!!!!!!!!"+userList.get(1).getBirthday().getClass());
+//			System.out.println("!!!!!!!!!!!!"+userList.get(1).getBirthday().getClass());
 			HttpServletResponse response = ServletActionContext.getResponse();
 			response.setContentType("application/x-excel");
 			response.setHeader("Content-Disposition", "attachement;filename="+new String("ni.xlsx".getBytes(),"ISO-8859-1"));
@@ -279,6 +321,11 @@ public class UserAction extends ActionSupport implements RequestAware{
 			e.printStackTrace();
 		}
 	}
+	
+
+	
+	
+	
 	
 	
 	
@@ -345,5 +392,74 @@ public class UserAction extends ActionSupport implements RequestAware{
 	public void setRoledIdRow(String[] roledIdRow) {
 		this.roledIdRow = roledIdRow;
 	}
+	public String getSearchValue() {
+		return searchValue;
+	}
+	public void setSearchValue(String searchValue) {
+		this.searchValue = searchValue;
+	}
+	public int getPageNumber() {
+		return pageNumber;
+	}
+	public void setPageNumber(int pageNumber) {
+		this.pageNumber = pageNumber;
+	}
+	public int getPageTotal() {
+		return pageTotal;
+	}
+	public void setPageTotal(int pageTotal) {
+		this.pageTotal = pageTotal;
+	}
+	public long getSum() {
+		return sum;
+	}
+	public void setSum(long sum) {
+		this.sum = sum;
+	}
 
+	
+	
+	
+
+/**	
+	// 列表页面。列举所有记录。
+	public String listUI() {
+	//	Map<String, Object> request = ActionContext.getContext().getContextMap();
+		List<User> userList = userService.getAll();	
+		request.put("userList", userList);
+		return "listUI";
+	}
+*/	
+	
+	/**
+	 * 1.改造列表页面（第1次改造）： 条件查询 出对应匹配的记录。当没有条件的时候，就是查询出user所有记录。
+	 */
+	/*
+	public String listUI() {
+		
+	//	Map<String, Object> request = ActionContext.getContext().getContextMap();	
+		
+		SqlUtil sqlUtil = new SqlUtil();
+		//是包括了包名的。cn.pbq.entity.User。也OK。
+		//HQl区分大小写。我我们直接写”User“字符串要注意大小写。"user"不行。"User"可以查到。
+		sqlUtil.setFrom(User.class.getName());
+		if(user!=null){
+			if(StringUtils.isNotBlank(user.getNickName())){
+				
+				sqlUtil.setWhere("nickName like ?","%"+user.getNickName()+"%");
+			}
+		}
+
+		sqlUtil.setOrderBy("nickName", "asc");  //user.nickName会出错。因为  小写的user。
+		String sql = sqlUtil.getSQL();
+		List<String> paremeterList = sqlUtil.getConditionParemeterList();	
+		
+
+		List<User> userList = userService.findObjectByCondition(sql, paremeterList);
+		request.put("userList", userList);
+		return "listUI";
+	}
+	*/
+	
+	
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+	
+<struts>
+	<package name="complain-action" extends="base-default" namespace="/fw">
+		<action name="complain_*" class="cn.pbq.action.ComplainAction" method="{1}">
+			<result name="{1}">/WEB-INF/jsp/fw/complain/{1}.jsp</result>
+			<result name="home" type="redirectAction">
+				<param name="actionName">home_home</param>
+				<param name="namespace">/sys</param>
+			</result>
+			<result name="listUIAction" type="redirectAction">
+				<param name="actionName">complain_listUI</param>
+<!-- 				<param name="complain.title">${searchValue}</param> -->
+				<param name="encode">true</param>
+			</result>
+		</action>
+	</package>
+</struts>	
+
+
+
+<!-- 			重定向到别名称空间下的Action。这种写法不行： 会被认为是/Business/fw/sys/home_complainAddUI.action。还是重定向在/fw名称空间的action。 -->
+<!-- 			<result name="home" type="redirectAction">/sys/home_home</result>  -->
+
+
+
+<!-- 因为home.jsp是在WEB-INF目录下，不能重定向直接访问。要通过对应的Action来访问WEB-INF目录的页面。 -->
+<!-- 			<result name="home" type="redirect">/WEB-INF/jsp/home/home.jsp</result> -->
+<!-- 转发是OK的-->
+<!-- <result name="home" type="dispatch">/WEB-INF/jsp/home/home.jsp</result> -->

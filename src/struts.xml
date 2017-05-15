@@ -40,9 +40,13 @@
 			<result name="{1}">/WEB-INF/jsp/fw/user/{1}.jsp</result>
 			<result name="listAction" type="redirectAction">
 				<param name="actionName">user_listUI</param>
-<!-- 				<param name="userName">${user.name}</param> -->
-<!-- 				<param name="encode">true</param> -->
+<!-- 			这里就像重新发送 请求request的  请求体 参数。键值对形式：user.nickName=${searchValue}。。 -->
+<!-- 			这里是struts。xml，struts配置文件中 ，可以用${searchValue}取UserAction中 的成员变量searchValue的值 -->
+				<param name="user.nickName">${searchValue}</param> 
+<!-- 			struts框架的定义过的encode。 encode一定要写对。不然会被当作 键值对参数。没起到编码效果 -->
+				<param name="encode">true</param>
 			</result>
+<!-- 			<result name="listUI" >/WEB-INF/jsp/fw/user/listUI.jsp</result> -->
 		</action>
 	</package>
 

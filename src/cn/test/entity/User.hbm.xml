@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-5-14 19:18:52 by Hibernate Tools 3.6.0.Final -->
+<hibernate-mapping>
+    <class name="cn.test.entity.User" table="user" catalog="tax">
+        <id name="id" type="string">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <property name="dept" type="string">
+            <column name="dept" length="20" />
+        </property>
+        <property name="nickName" type="string">
+            <column name="nickName" length="20" not-null="true" />
+        </property>
+        <property name="userName" type="string">
+            <column name="userName" length="20" not-null="true" />
+        </property>
+        <property name="password" type="string">
+            <column name="password" length="20" not-null="true" />
+        </property>
+        <property name="headImg" type="string">
+            <column name="headImg" length="100" />
+        </property>
+        <property name="gender" type="string">
+            <column name="gender" length="10" />
+        </property>
+        <property name="state" type="string">
+            <column name="state" length="1" />
+        </property>
+        <property name="mobile" type="string">
+            <column name="mobile" length="20" />
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="30" />
+        </property>
+        <property name="birthday" type="timestamp">
+            <column name="birthday" length="19" />
+        </property>
+        <property name="memo" type="string">
+            <column name="memo" length="300" />
+        </property>
+        <set name="userRoles" table="user_role" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="userId" />
+            </key>
+            <one-to-many class="cn.test.entity.UserRole" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+	
+<struts>
+	<package name="info-action" extends="base-default" namespace="/fw">
+		<action name="info_*" class="cn.pbq.action.InfoAction" method="{1}">
+			<result name="{1}">/WEB-INF/jsp/fw/info/{1}.jsp</result>
+			<result name="listUIAction" type="redirectAction">
+				<param name="actionName">info_listUI</param>
+				<param name="info.title">${searchValue}</param>
+				<param name="encode">true</param>
+			</result>
+		</action>
+	</package>
+</struts>	

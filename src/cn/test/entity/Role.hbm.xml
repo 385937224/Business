@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-5-14 19:18:52 by Hibernate Tools 3.6.0.Final -->
+<hibernate-mapping>
+    <class name="cn.test.entity.Role" table="role" catalog="tax">
+        <id name="roleId" type="string">
+            <column name="roleId" length="100" />
+            <generator class="assigned" />
+        </id>
+        <property name="name" type="string">
+            <column name="name" length="20" />
+        </property>
+        <property name="state" type="string">
+            <column name="state" length="1" />
+        </property>
+        <set name="rolePrivileges" table="role_privilege" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="roleId" length="100" not-null="true" />
+            </key>
+            <one-to-many class="cn.test.entity.RolePrivilege" />
+        </set>
+        <set name="userRoles" table="user_role" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="roleId" length="100" />
+            </key>
+            <one-to-many class="cn.test.entity.UserRole" />
+        </set>
+    </class>
+</hibernate-mapping>

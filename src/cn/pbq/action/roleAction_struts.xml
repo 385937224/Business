@@ -9,9 +9,8 @@
 			<result name="{1}">/WEB-INF/jsp/fw/role/{1}.jsp</result>
 			<result name="listAction" type="redirectAction">
 				<param name="actionName">role_listUI</param>
-<!-- 				把登录的用户信息一起传递过去 -->
-<!-- 				<param name="userName"></param> -->
-<!-- 				<param name="encode">true</param> -->
+				<param name="role.name">${searchValue}</param>
+				<param name="encode">true</param>
 			</result>
 		</action>
 	</package>

@@ -35,6 +35,7 @@ public class LoginFilter implements Filter {
 		HttpSession session = httpServletRequest.getSession();
 		String requestURI = httpServletRequest.getRequestURI();
 		
+
 		if(StringUtils.isNotBlank(requestURI) && !requestURI.contains("/login") ){
 //			System.out.println("当前请求路径"+requestURI);
 			User user = (User) session.getAttribute(Constant.USER);

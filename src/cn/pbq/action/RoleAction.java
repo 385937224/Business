@@ -12,26 +12,25 @@ import java.util.UUID;
 import javax.annotation.Resource;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.interceptor.RequestAware;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 import cn.pbq.constant.Constant;
+import cn.pbq.entity.Info;
 import cn.pbq.entity.Role;
 import cn.pbq.entity.RolePrivilege;
 import cn.pbq.entity.RolePrivilegeId;
 import cn.pbq.entity.User;
 import cn.pbq.service.RoleService;
+import cn.pbq.util.Page;
+import cn.pbq.util.SqlUtil;
 
-public class RoleAction extends ActionSupport implements RequestAware{
+public class RoleAction extends BaseAction{
 	@Resource
 	private RoleService roleService;
 	
-	private Map<String, Object> request;
-	@Override
-	public void setRequest(Map<String, Object> request) {
-		this.request=request;
-	}
 
 
 	/***************************************************************/
@@ -40,25 +39,25 @@ public class RoleAction extends ActionSupport implements RequestAware{
 	private String[] selectedRow;
 
 
-
+	//优化。条件查询、分页效果
 	public String listUI() throws Exception {
-		List<Role> roleList = roleService.getAll();
+		SqlUtil sqlUtil = new SqlUtil();
+		sqlUtil.setFrom(Role.class.getName());
+		if(role!=null){
+			if(StringUtils.isNotBlank(role.getName())){
+				sqlUtil.setWhere(" name like ? ", "%"+role.getName()+"%");
+			}
+		}
+		if(pageNumber<1)pageNumber=1;
+		Page page = roleService.getPage(sqlUtil, pageNumber, 3);
+		sum=page.getSum();
+		pageTotal=page.getPageTotal();
 		
-		request.put("roleList", roleList);
 		
-		//为什么jsp页面不断刷新会出现排列顺序变化？Set<RolePrivilege>中每次取都不同的顺序
-//		Set<RolePrivilege> rolePrivileges = roleList.get(0).getRolePrivileges();
-	//	if(rolePrivileges!roleList=null){
-	//		for(RolePrivilege aa : rolePrivileges)
-	//		{
-	//			System.out.println(aa.getId().getCode());			
-	//		}
-	//	}
+		request.put("roleList", page.getList());
 		request.put("map", Constant.PRIVILEGE_MAP);
 		return "listUI";
 	}
-	
-	
 	
 	public String addUI(){	
 		request.put("privileges", Constant.PRIVILEGE_MAP);
@@ -84,6 +83,8 @@ public class RoleAction extends ActionSupport implements RequestAware{
 	
 	//跳转到编辑页面
 	public String editUI(){
+		
+		searchValue=role.getName();
 		role = roleService.findById(role.getRoleId());
 		request.put("map", Constant.PRIVILEGE_MAP);
 		request.put("role", role);
@@ -93,8 +94,7 @@ public class RoleAction extends ActionSupport implements RequestAware{
 	//保存编辑
 	public String edit()throws Exception{
 
-		System.out.println("Set<RolePrivileges>!!!!!!!!!!!!!!!!"+role.getRolePrivileges());
-
+//		System.out.println("Set<RolePrivileges>!!!!!!!!!!!!!!!!"+role.getRolePrivileges());
 		
 		//当你什么权限都不选，此时hasPrivileges为null
 		if(hasPrivileges!=null){
@@ -113,12 +113,14 @@ public class RoleAction extends ActionSupport implements RequestAware{
 	
 	//删除
 	public String delete(){
+		searchValue=role.getName();
 		roleService.delete(role.getRoleId());
 		return "listAction";
 	}
 
 	//批量删除
 	public String deleteAll(){
+		searchValue=role.getName();
 		if(selectedRow!=null){
 			for(String roleTmep: selectedRow)
 			{
@@ -151,3 +153,33 @@ public class RoleAction extends ActionSupport implements RequestAware{
 
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+/*
+ *最原始的列表方法。直接列出所有记录
+	public String listUI() throws Exception {
+		List<Role> roleList = roleService.getAll();
+		
+		request.put("roleList", roleList);
+		
+		//为什么jsp页面不断刷新会出现排列顺序变化？Set<RolePrivilege>中每次取都不同的顺序
+//		Set<RolePrivilege> rolePrivileges = roleList.get(0).getRolePrivileges();
+	//	if(rolePrivileges!roleList=null){
+	//		for(RolePrivilege aa : rolePrivileges)
+	//		{
+	//			System.out.println(aa.getId().getCode());			
+	//		}
+	//	}
+		request.put("map", Constant.PRIVILEGE_MAP);
+		return "listUI";
+	}
+*/
