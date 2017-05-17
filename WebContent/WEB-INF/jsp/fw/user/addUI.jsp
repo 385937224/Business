@@ -72,7 +72,7 @@
 //     		{
 // 	    		type:"POST",
 // 	    		url:"${basePath}fw/user_verifyUserName.action",
-// 	    		content:{"user.userName":$userName.val()},
+// 	    		data:{"user.userName":$userName.val()},
 // 	    		success:function(backDate,textStatus,ajax){
 	    					
 // 	    					alert(backDate.userNameFlag);				
@@ -179,9 +179,9 @@
     <table id="baseInfo" width="100%" align="center" class="list" border="0" cellpadding="0" cellspacing="0"  >
         <tr>
             <td class="tdBg" width="200px">所属部门：</td>
-            <td>
+            <td>请选择部门
 	 			<select name="user.dept" >
-        	 		<option>请选择部门</option>
+        	 		
         	 	</select>
             </td>
         </tr>

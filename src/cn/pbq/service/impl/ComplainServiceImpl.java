@@ -24,6 +24,12 @@ public class ComplainServiceImpl extends BaseServiceImpl<Complain> implements Co
 		this.complainDao = complainDao;
 		super.setBaseDao(complainDao);
 	}
+	
+	
+	@Override
+	public List<String> findUserByDept(String dept) {
+		return complainDao.findUserByDept(dept);
+	}
 
 	
 

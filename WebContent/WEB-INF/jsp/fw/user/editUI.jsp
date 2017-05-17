@@ -138,8 +138,11 @@
 						</tr>
 						<tr>
 							<td class="tdBg" width="200px">头像：</td>
-							<td><img alt="" src="/taxupload/${user.headImg}" width="100"
-								height="100"> <input type="file" name="headImg" /></td>
+							<td><img alt="" src="/taxupload/${user.headImg}" width="100"  height="100"> 
+								<input type="file" name="headImg" />
+								<!-- 用户封装原来的头像路径，若传了新头像，后台就设置新的头像来保存。 -->
+								<input type="hidden"   name="user.headImg"  value="${user.headImg}">
+							</td>
 						</tr>
 						<tr>
 							<td class="tdBg" width="200px">用户名：</td>
@@ -195,9 +198,9 @@
 						</tr>
 						<tr>
 							<td class="tdBg" width="200px">状态：</td>
-							<td>有效<input type="checkbox" name="user.state" value="有效"
-								${'有效'==user.state?'checked':''} /> 无效<input type="checkbox"
-								name="user.state" value="无效" ${'无效'==user.state?'checked':''} />
+							<td>有效<input type="checkbox" name="user.state" value="1"
+								${'1'==user.state?'checked':''} /> 无效<input type="checkbox"
+								name="user.state" value="0" ${'0'==user.state?'checked':''} />
 							</td>
 						</tr>
 						<tr>

@@ -27,7 +27,7 @@ public class Constant {
 	public static Map<String, String> INFO_TYPE_MAP;
 	
 	//info信息分类
-	private static String[] DEPT_ARRAY;
+	public static String[] DEPT_ARRAY;
 	
 
 	

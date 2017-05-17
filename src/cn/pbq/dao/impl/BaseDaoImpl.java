@@ -110,7 +110,7 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements BaseDao<T> {
 		//因为该类中要用到多次session。所以提前抽取。不用每次都getSession(),这句子包含有创建的个线程的session对象意思。
 		Session session = getSession();
 		Query query = session.createQuery(sqlUtil.getSQL());
-		List<String> paremeterList = sqlUtil.getConditionParemeterList();
+		List<Object> paremeterList = sqlUtil.getConditionParemeterList();
 		if(paremeterList!=null&& paremeterList.size()>0){
 			for (int i = 0; i < paremeterList.size(); i++) {
 				query.setParameter(i, paremeterList.get(i));

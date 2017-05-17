@@ -19,7 +19,7 @@ public class SqlUtil {
 	private String where="";
 	private String orderBy="";
 	
-	private List<String> conditionParemeterList;
+	private List<Object> conditionParemeterList;
 	
 
 	
@@ -43,8 +43,10 @@ public class SqlUtil {
 	 * 
 	 * 若是多表查询。condition就要加上个别名了。自动循环分配别名?还是自定义别名？
 	 * 都可以。自动分配别名，就像setParemeter(1,*) 这样按位置区别 表。
+	 * 
+	 * 开始写string...。有局限性，改成了Object...
 	 */
-	public void setWhere(String condition,String... conditionParemeters){
+	public void setWhere(String condition,Object... conditionParemeters){
 		/**
 		 * 我这里这样写有点局限性。只能查“=”和一个参数的条件。
 		 * 只能查找“=”的条件。如果是 ">=？" "like ？" 和“between ？ and ？”等条件呢？
@@ -65,10 +67,10 @@ public class SqlUtil {
 		
 		
 		if(conditionParemeterList==null){
-			conditionParemeterList=new ArrayList<String>();
+			conditionParemeterList=new ArrayList<Object>();
 		}
-		for (String string : conditionParemeters) {
-			conditionParemeterList.add(string);
+		for (Object temp : conditionParemeters) {
+			conditionParemeterList.add(temp);
 		}
 		
 		
@@ -96,7 +98,7 @@ public class SqlUtil {
 	}
 	
 	//得到   hql语句中?占位符 对应的 参数list集合
-	public List<String> getConditionParemeterList() {
+	public List<Object> getConditionParemeterList() {
 		return conditionParemeterList;
 	}
 

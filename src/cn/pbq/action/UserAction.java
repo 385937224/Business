@@ -208,9 +208,11 @@ public class UserAction extends ActionSupport implements RequestAware{
 	public String edit()throws Exception{
 //		System.out.println("@@@@@@@@@@@@@@"+searchValue);
 		
-		String id = user.getId();
-		User userInDB = userService.findById(id);
-		user.setHeadImg(userInDB.getHeadImg());
+
+		//如果用了openSessionInViewFilter模式（这种模式session不会在Dao层关闭），这里会有问题出现：不同的对象，具有相同的标识符号，在一个session中。
+		//因为这里findById（）会产生一个user，这个userInDB对象的标识  和   user 对象的标识相同（id相同）。
+//		User userInDB = userService.findById(user.getId());
+//		user.setHeadImg(userInDB.getHeadImg());//用意是保存原本的头像路径。但是有可能出现问题，所以还是前台封装近来。
 		
 		if(headImg!=null){
 			Properties properties = new Properties();
@@ -229,6 +231,7 @@ public class UserAction extends ActionSupport implements RequestAware{
 //			保存到数据库实际是个路径名。服务器虚拟路径使用。可以再拼上些文件层次 ,如："user/"+headImgFileName2
 			user.setHeadImg(headImgFileName);
 		}
+		
 		userService.updateUserAndRole(user, roledIdRow);
 //		userService.update(user);
 		return "listAction";

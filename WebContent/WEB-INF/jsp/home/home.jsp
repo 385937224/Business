@@ -112,7 +112,18 @@
                     <td width="150px">xx创建人</td>
                     <td width="150px">xx创建时间</td>
                 </tr>
-                
+                <s:iterator value="infoList">
+                <tr>
+                    <td height="23">
+                    <a href="${ctx}/sys/home_infoViewUI.action?info.infoId=<s:property value="infoId"/>" target="_blank">
+                    	<s:property value="title"/>
+                    </a>
+                    </td>
+                    <td width="150px"><s:property value="infoType"/></td>
+                    <td width="150px"><s:property value="creator"/></td>
+                    <td width="150px"><s:property value="createTime"/></td>
+                </tr>
+                </s:iterator>
             </table>
         </div>
     </div>
@@ -128,16 +139,18 @@
                 </div>
             </div>
             <table width="98%" border="0" align="center">
-                
+            <s:iterator value="compList">   
                 <tr>
                     <td height="23">
-                    xxx标题
+                    <a href="${ctx}/sys/home_complainViewUI.action?complain.compId=<s:property value="compId"/>" target="_blank">
+                   	 	<s:property value="title"/>
+                    </a>
                     </td>
-                    <td width="180px">xx受理状态</td>
-                    <td width="180px">是否匿名投诉</td>
-                    <td width="180px">投诉时间</td>
+                    <td width="180px"><s:property value="state==1?'受理':'未受理'"/></td>
+                    <td width="180px"><s:property value="anonymity?'匿名':'非匿名'"/></td>
+                    <td width="180px"><s:date name="compTime" format="yyyy-MM-dd"/></td>
                 </tr>
-                
+            </s:iterator>    
             </table>
         </div>
 

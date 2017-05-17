@@ -78,7 +78,9 @@
 				<li><a href="javascript:void(0);">行政管理</a></li>
 				<li><a href="javascript:void(0);">后勤服务</a></li>
 				<li><a href="javascript:void(0);">在线学习</a></li>
-				<li><a href="${basePath}sys/home_fwframe.action">服务列表</a></li>
+<!-- 			在前端有框架的情况下，_self是自身框架的意思，_parent是父框架，target="_top"是page，整个页面。 -->
+<!-- 			默认是_self吧，这里若不刷新整个page，会导致leftFrame的左菜单框架受影响。 -->
+				<li><a href="${basePath}sys/home_fwframe.action" target="_top">服务列表11</a></li>
 				<li><a href="javascript:void(0);">我的空间</a></li>
 			</ul>
 		</div>

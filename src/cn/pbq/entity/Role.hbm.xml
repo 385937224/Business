@@ -15,7 +15,8 @@
             <column name="state" length="1" />
         </property>
 		<!--inverse="true"  要加上，操作role  同时级联保存、删除、 更新 role-privilege 会报错 -->
-        <set name="rolePrivileges" table="role_privilege" inverse="true" lazy="false" cascade="save-update,delete" >
+		<!--order-by="" ，，hibernate自动封装的Set集合是无序的。加这个属性后，确保每次封装的Set集合中是有顺序的，按照code字段内容排序。。 -->
+        <set name="rolePrivileges" table="role_privilege" inverse="true" lazy="false" cascade="save-update,delete" order-by="code">
             <key>
                 <column name="roleId" length="100" not-null="true" />
             </key>

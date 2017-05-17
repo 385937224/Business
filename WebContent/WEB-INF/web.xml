@@ -15,6 +15,16 @@
   </context-param>
   
   <filter>
+  	<filter-name>openSessionInViewFilter</filter-name>
+  	<filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+  </filter>
+  <filter-mapping>
+  	<filter-name>openSessionInViewFilter</filter-name>
+  	<url-pattern>*.action</url-pattern>
+  </filter-mapping>
+  
+  
+  <filter>
   	<filter-name>loginFilter</filter-name>
   	<filter-class>cn.pbq.filter.LoginFilter</filter-class>
   </filter>

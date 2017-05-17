@@ -13,6 +13,38 @@
 			document.forms[0].submit();
 		}
     
+    	function doGetUserJson(){
+    		
+    	
+    		
+//     		alert($("select.eq(1)").html());
+    		var dept=$(":selected:eq(0)").val();
+    		$.ajax({
+    			
+    			type:"post",
+    			url:"${basePath}fw/complain_getUserJson.action",
+    			data:{"complain.deptOfPeople":dept},
+    			success:function(backdata,testStatus,ajax){
+    				//Action中所有变量都转化为json时候。的写法。
+//     				alert(backdata.nickNameList);
+//     				原生的ajax对象httpServlet，得到的json文本要用eval()转化成js对象才可以解析。
+//     				alert(eval("("+ajax.responseText+")").nickNameList);
+					
+					//-----------------要清空，不然append()会一直累加
+					$("select[name='complain.people'] option").remove();
+					
+					//_struts.xml中设置了只对 nickNameList进行json转化，这里backdata直接得到的就是nickNameList。
+					for(var i=0;i<backdata.length;i++){	
+					var $option = $("<option value='"+backdata[i]+"'>"+backdata[i]+"</option>");
+					$("select[name='complain.people']").append($option);
+					}
+    				
+    			}
+    		})
+    	
+    	}
+    	
+    	
     
     
     </script>
@@ -33,11 +65,20 @@
         </tr>
         <tr>
             <td class="tdBg">被投诉人部门：</td>
-            <td></td>
+            <td><select name="complain.deptOfPeople"  onchange="doGetUserJson()" >
+            	<option value=""></option>
+            	<c:forEach items="${deptList }" var="dept">
+            		<option value="${dept}">${dept}</option>
+            	</c:forEach>
+            </select></td>
         </tr>
         <tr>
             <td class="tdBg">被投诉人姓名：</td>
-            <td></td>
+            <td>
+            	<select name="complain.people" >
+
+            	</select>
+            </td>
         </tr>
         <tr>
             <td class="tdBg">投诉内容：</td>

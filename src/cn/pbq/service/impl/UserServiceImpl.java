@@ -162,6 +162,10 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	
 	@Override
 	public void updateUserAndRole(User user, String... roleId){	
+		
+		//注意了，这里是两次调用userDao，但是就执行了两次 getSession方法。
+		//再加上我们使用了openSessionInViewFilter，所以这里两个session同在，
+		//可又欲在次合为一个session，会引发错误。
 		userDao.update(user);
 		////hibernate特性问题。要先删除中间表中的对应数据。再全部重新加进去。
 		userDao.deleteUser_RoleByUserId(user.getId());		
@@ -173,6 +177,8 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 		}
 	}
 
+
+	
 	@Override
 	public List<User> findUserByUsernameAndPassword(String username, String password) {		
 		return userDao.findUserByUsernameAndPassword(username, password);

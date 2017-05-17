@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hibernate.Session;
 
 import cn.pbq.dao.UserDao;
 import cn.pbq.entity.Role;
@@ -86,8 +87,11 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		
 		return query.list();
 	}
-	
 
+
+
+	
+	
 	
 	
 }

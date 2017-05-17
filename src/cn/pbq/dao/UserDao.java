@@ -19,4 +19,7 @@ public interface UserDao extends BaseDao<User> {
 	//根据用户名和密码找用户。
 	List<User> findUserByUsernameAndPassword(String username,String password);
 	
+	
+	
+
 }

@@ -23,6 +23,11 @@ public class Complain implements java.io.Serializable {
 	private Boolean anonymity;
 	private Set replytocomps = new HashSet(0);
 
+	
+	//投诉处理状态
+	public static String STATE_UNDONE ="0";
+	public static String STATE_DONE ="1";
+	
 	public Complain() {
 	}
 

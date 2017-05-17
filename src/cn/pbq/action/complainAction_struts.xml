@@ -4,12 +4,17 @@
 	"http://struts.apache.org/dtds/struts-2.3.dtd">
 	
 <struts>
-	<package name="complain-action" extends="base-default" namespace="/fw">
+	<package name="complain-action" extends="base-default,json-default" namespace="/fw">
 		<action name="complain_*" class="cn.pbq.action.ComplainAction" method="{1}">
 			<result name="{1}">/WEB-INF/jsp/fw/complain/{1}.jsp</result>
 			<result name="home" type="redirectAction">
 				<param name="actionName">home_home</param>
 				<param name="namespace">/sys</param>
+			</result>
+			<result name="success" type="json">
+<!-- 			只对nickNameList变量转化成json格式，不指定root参数，就会把Action类中所有变量都转化json -->
+<!-- 			全部的转化后，前端怎么取特定变量？       data.nickNameList -->
+				<param name="root">nickNameList</param>
 			</result>
 			<result name="listUIAction" type="redirectAction">
 				<param name="actionName">complain_listUI</param>

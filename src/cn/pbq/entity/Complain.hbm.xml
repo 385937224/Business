@@ -38,7 +38,7 @@
         <property name="anonymity" type="java.lang.Boolean">
             <column name="anonymity" />
         </property>
-        <set name="replytocomps" table="replytocomp" inverse="true" lazy="true" fetch="select">
+        <set name="replytocomps" table="replytocomp" inverse="true" lazy="true" fetch="select" cascade="save-update,delete">
             <key>
                 <column name="compId" length="32" />
             </key>

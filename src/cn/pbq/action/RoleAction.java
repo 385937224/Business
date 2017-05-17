@@ -48,6 +48,9 @@ public class RoleAction extends BaseAction{
 				sqlUtil.setWhere(" name like ? ", "%"+role.getName()+"%");
 			}
 		}
+		// Role表中没这个字段所以不能按照这字段排序。想排序的是set集合中的顺序，去xml中设置《set  order-by=""》属性值
+//		sqlUtil.setOrderBy("code",	 "asc");
+		
 		if(pageNumber<1)pageNumber=1;
 		Page page = roleService.getPage(sqlUtil, pageNumber, 3);
 		sum=page.getSum();
